@@ -4,6 +4,7 @@
 # ! after checking the database connection
 connection =True
 if (connection):
-    import login_view as root
+    from GUI.Screens import login_view as root
+    obj=root.login_view("admin","1234")
 else:
     print ("Please check your connection with database")

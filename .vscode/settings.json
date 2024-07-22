@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "./Models"
+        "./GUI/Constants",
+        "./GUI/Screens"
     ]
 }
