@@ -81,9 +81,12 @@ class StudentInfoApp:
         courses_frame.place(relx=0.5, rely=0.6, anchor=CENTER)
 
     def create_back_button(self):
-        back_button = Button(self.root, text="BACK", font=("Arial", 12, 'bold'), fg="white", bg="dark blue", command=self.root.quit)
+        back_button = Button(self.root, text="BACK", font=("Arial", 12, 'bold'), fg="white", bg="dark blue", command=self.pop)
         back_button.pack(side=LEFT, anchor="sw", padx=padx, pady=pady)
-
+    def pop(self):
+        self.root.destroy()
+        from login_view import LoginView
+        LoginView()
 # Run the application
-if __name__ == "__main__":
-    StudentInfoApp()
+# if __name__ == "__main__":
+# StudentInfoApp()
