@@ -10,7 +10,7 @@ class LoginView:
 
         # Set title and screen size
         self.root.title("Login Screen")
-        self.root.geometry(login_geometry)
+        self.root.geometry(geometry)
         self.root.resizable(False, False)
 
         # Set background color
@@ -51,10 +51,3 @@ class LoginView:
         else:
             print("Invalid username or password")
             messagebox.showerror("Error", "Invalid username or password")
-
-    def open_main_screen(self):
-        main_screen = Tk()
-        main_screen.title("Main Screen")
-        main_screen.geometry("600x400")
-        Label(main_screen, text="Welcome to the Main Screen!", font=("Arial", 16)).pack(pady=20)
-        main_screen.mainloop()
