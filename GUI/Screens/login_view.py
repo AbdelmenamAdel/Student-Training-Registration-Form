@@ -46,8 +46,8 @@ class LoginView:
             print("Login successful!")
             messagebox.showinfo("Success", "Login successful!")
             self.root.destroy()  # Close the login screen
-            from shams import student_info # Open the main screen
-            student_info()
+            from shams import StudentInfoApp # Open the main screen
+            StudentInfoApp()
         else:
             print("Invalid username or password")
             messagebox.showerror("Error", "Invalid username or password")
