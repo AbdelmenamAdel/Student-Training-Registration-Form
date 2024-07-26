@@ -3,7 +3,9 @@
 # ! Sizes
 padx=20
 pady=20
-login_geometry="750x500"
+width=750
+height=500
+geometry=f"{width}x{height}"
 # ! Fonts
 font_style_arial="Arial"
 font_size_12=12
