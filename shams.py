@@ -36,7 +36,7 @@ class StudentInfoApp:
         student_year = "الفرقة الثالثة"
 
         student_frame = Frame(self.root)
-        student_frame.pack(pady=pady)
+        student_frame.pack(pady=pady20)
 
         student_name_lbl = Label(student_frame, text=f"اسم الطالب :  {student_name}", font=("Arial", 12))
         student_name_lbl.grid(row=0, column=1, padx=10, pady=5)
@@ -58,7 +58,7 @@ class StudentInfoApp:
         ]
 
         courses_frame = Frame(self.root)
-        courses_frame.pack(pady=pady)
+        courses_frame.pack(pady=pady20)
 
         columns = ("grade", "credits", "course_name", "course_code")
         tree = Treeview(courses_frame, columns=columns, show="headings")
@@ -82,7 +82,7 @@ class StudentInfoApp:
 
     def create_back_button(self):
         back_button = Button(self.root, text="BACK", font=("Arial", 12, 'bold'), fg="white", bg="dark blue", command=self.pop)
-        back_button.pack(side=LEFT, anchor="sw", padx=padx, pady=pady)
+        back_button.pack(side=LEFT, anchor="sw", padx=padx20, pady=pady20)
     def pop(self):
         self.root.destroy()
         from login_view import LoginView
