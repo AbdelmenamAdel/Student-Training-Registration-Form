@@ -7,7 +7,7 @@ class LoginView:
         self.root = Tk()
 
         # Create the Root screen frame
-        self.root_frame = Frame(self.root, bg=background_color, padx=padx, pady=pady)
+        self.root_frame = Frame(self.root, bg=background_color, padx=padx20, pady=pady20)
         self.root_frame.place(relx=0.5, rely=0.5, anchor='center')
 
         # Set title and screen size
@@ -20,29 +20,29 @@ class LoginView:
 
         # Style labels
         username_label = Label(self.root_frame, text="Username:", font=(font_style_arial, font_size_12, "bold"), fg=black)  # Black text
-        username_label.grid(row=0, column=0, pady=pady, padx=padx)  # Add padding
+        username_label.grid(row=0, column=0, pady=pady20, padx=padx20)  # Add padding
 
         password_label = Label(self.root_frame, text="Password:", font=(font_style_arial, font_size_12, "bold"), fg=black)
-        password_label.grid(row=1, column=0, pady=pady, padx=padx)
+        password_label.grid(row=1, column=0, pady=pady20, padx=padx20)
 
         # Style entry fields
         self.username = StringVar()
         username_entry = Entry(self.root_frame, textvariable=self.username, font=(font_style_arial, font_size_12), bg=white, fg=black)  # White background, black text
-        username_entry.grid(row=0, column=1, pady=pady, padx=padx)
+        username_entry.grid(row=0, column=1, pady=pady20, padx=padx20)
 
         self.password = StringVar()
         password_entry = Entry(self.root_frame, textvariable=self.password, font=(font_style_arial, font_size_12), show="*", bg=white, fg=black)
-        password_entry.grid(row=1, column=1, pady=pady, padx=padx)
+        password_entry.grid(row=1, column=1, pady=pady20, padx=padx20)
 
         # Style radio buttons
         self.rbtn_var = StringVar()
         self.rbtn_var.set('Admin')
         rbtn1 = Radiobutton(self.root_frame, text="Admin", value='Admin', variable=self.rbtn_var, font='bold', command=self.display_option)
         rbtn2 = Radiobutton(self.root_frame, text="Student", value='Student', variable=self.rbtn_var, font='bold', command=self.display_option)
-        rbtn1.grid(row=2, column=0, pady=pady, padx=padx)
-        rbtn2.grid(row=2, column=1, pady=pady, padx=padx)
+        rbtn1.grid(row=2, column=0, pady=pady20, padx=padx20)
+        rbtn2.grid(row=2, column=1, pady=pady20, padx=padx20)
         # Style button
-        login_button = Button(self.root_frame, text="Login", command=self.login_attempt, font=(font_style_arial, font_size_12, "bold"), bg=primary_color, fg=white, width=10)  # Green button, white text
+        login_button = Button(self.root_frame, text="Login", command=self.login_attempt, font=(font_style_arial, font_size_12, "bold"), bg=primary_color, fg=white, width=btn_width)  # ! Green button, white text
         login_button.grid(row=3, columnspan=2, pady=10, padx=10)
         self.root.mainloop()
     def display_option(self):
