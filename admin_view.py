@@ -39,9 +39,20 @@ class AdminView:
         self.lbl_student_id = Label(self.root_frame, text=self.admin[4], font=font_content, bg=background_color)
 
         # Buttons
-        self.btn_edit_courses = Button(self.root_frame, text='قائمة المقررات', font=font_button,  bg=primary_color, fg=white,width=btn_width)
-        self.btn_edit_students = Button(self.root_frame, text='قائمة الطلاب', font=font_button,  bg=primary_color, fg=white,width=btn_width)
-        self.btn_logout = Button(self.root_frame, text='تسجيل الخروج', font=font_button,  bg=primary_color, fg=white,width=btn_width)
+        self.btn_edit_courses = Button(self.root_frame, text='قائمة المقررات', font=font_button,  bg=primary_color, fg=white,width=btn_width,command=self.modifay_cources)
+        self.btn_edit_students = Button(self.root_frame, text='قائمة الطلاب', font=font_button,  bg=primary_color, fg=white,width=btn_width,command=self.modifay_student)
+        self.btn_logout = Button(self.root_frame, text='تسجيل الخروج', font=font_button,  bg=primary_color, fg=white,width=btn_width,command=self.logout)
+    def logout(self):
+        self.root.destroy()
+        from login_view import LoginView
+        LoginView()
+    def modifay_student(self):
+        self.root.destroy()
+       
+        
+    def modifay_cources(self):
+        self.root.destroy()
+        # add_corces()
 
     def position_widgets(self):
         # Position labels using grid
