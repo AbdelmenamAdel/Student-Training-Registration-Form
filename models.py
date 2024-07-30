@@ -5,13 +5,14 @@ class AdminModel:
         self.email = email
         self.Ssh=Ssh
 class StudentModel:
-    def __init__(self, fname, mname, lname, semail, sgpa, scourse):
-        self.fname = fname
-        self.mname = mname
-        self.lname = lname
-        self.semail = semail
-        self.sgpa = sgpa
-        self.scourse = scourse
+    def __init__(self, username,password, Ssh,email, gpa,grade, passedHours):
+        self.username=username
+        self.password=password
+        self.email = email
+        self.Ssh = Ssh
+        self.gpa = gpa
+        self.grade=grade
+        self.passedHours = passedHours
 class CourseModel:
     def __init__(self, cname, cdescription):
         self.cname = cname
