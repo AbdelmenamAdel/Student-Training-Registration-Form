@@ -6,10 +6,180 @@ from tkinter.ttk import Style
 from tkinter.ttk import Treeview
 #from tkinter.ttk import *
 
+def add_corces():
+
+    root =Tk()
+
+
+    sub_name=StringVar()
+    sub_code=StringVar()
+    sub_hour=StringVar()
+
+
+
+    root.title('تسجيل المقرارت')
+    root.geometry('1080x615+0+0')
+    root.configure(bg='#1c5e80')
+
+    entries_frame=Frame(root)
+
+    entries_frame.place_configure(x=5,y=5,width=400,height =510)
+    title=Label(entries_frame,text='اختيار المستوي..',font=(14))
+    title.place_configure(x=250,y=1)
+    level=['المستوي الاول', 'المستوي الثاني','المستوي الثالث','المستوي الرابع']
+
+    first_grade = [
+            ("c++","cs50", 3),
+            ("oop","gh5",3),
+        ]
+
+    second_grade = [
+            ("data structuer","cs50", 3),
+            ("algorithm","gh5",3),
+        ]
+
+
+    third_grade = [
+            ("database","cs50", 3),
+            ("is","gh5",3),
+        ]
+
+
+    fourth_grade = [
+            ("math","cs50", 3),
+            ("english","gh5",3),
+        ]
 
 
 
 
+    #grade_var = StringVar() ,textvariable = grade_var
+    selcet_level=Combobox(entries_frame,width=18,values=level,state='readonly')
+    selcet_level.place_configure(x=100,y=3)
+
+    def add_sub():
+        root2=Tk()
+        root2.geometry('400x250')
+        sub_name =Label(root2,text='اسم المقرر',)
+        sub_name.place(x=290,y=110)
+
+        txt_namesub=Entry(root2,textvariable=sub_name,width=20)
+        txt_namesub.place_configure(x=150,y=110)
+
+
+        sub_code =Label(root2,text='كود المقرر',)
+        sub_code.place(x=290,y=140)
+
+        txt_codesub=Entry(root2,textvariable=sub_code,width=20)
+        txt_codesub.place_configure(x=150,y=140)
+
+
+        sub_hour =Label(root2,text='عدد الساعات',)
+        sub_hour.place(x=290,y=170)
+
+        txt_hoursub=Entry(root2,textvariable=sub_hour,width=20)
+        txt_hoursub.place_configure(x=150,y=170)
+
+        def savedata():
+            info = (txt_namesub.get(), txt_codesub.get(), txt_hoursub.get())
+            if selcet_level.get() == level[0]:
+                first_grade.append(info)
+                show_table5()
+            elif selcet_level.get() == level[1]:
+                 second_grade.append(info)
+                 show_table5()
+            elif selcet_level.get() == level[2]:
+                third_grade.append(info)
+                show_table5()
+            elif selcet_level.get() == level[3]:
+                fourth_grade.append(info)
+                show_table5()
+        btn_save = Button(root2,text = 'save',command=savedata)
+        btn_save.pack_configure(anchor='center',side='bottom')
+    
+        root2.mainloop()
+
+    def delet():
+        for student in tv.selection():
+                tv.delete(student)
+    
+    bt_add=Button(entries_frame,text='Add',command= add_sub)
+    bt_delet=Button(entries_frame,text='Delete', command= delet)
+
+
+    bt_delet.pack_configure(anchor='center',side='bottom')
+    bt_add.pack_configure(anchor='center',side='bottom',)
+
+
+    tree_frame=Frame(root,)
+    tree_frame.place(x=420,y=5,width=500,height=510)
+    style=Style()
+    style.configure("mystyle.Treeview",font=('Calibri',13 ),rowheight=50)
+    style.configure('mystyle.Treeview.Heading',font=('Calibri',13 ))
+    tv=Treeview(tree_frame,columns=(1,2,3) ,style="mystyle.Treeview")
+
+    tv.heading("1", text="عدد الساعات")
+    tv.column("1", width="140")
+    tv.heading("2", text="كود المقرر")
+    tv.column("2", width="140")
+    tv.heading("3", text="اسم المقرر")
+    tv.column("3", width="140")
+    tv['show']='headings'
+
+    tv.place(x=1,y=1,height=600)
+
+    def hide():
+        root.geometry("400x510")
+        #print(selcet_level.get())
+    def show():
+        root.geometry('1080x615+0+0')
+    bthide =Button(entries_frame,text="Hide_Table",command=hide)
+    bthide.place(x=100,y=270)
+    
+
+
+    def show_table5():
+        if selcet_level.get() == level[0]:
+            for item in tv.get_children():
+                tv.delete(item)
+            for sub in first_grade:
+                tv.insert("",'end',iid=sub[0],values=sub )
+                tv.grid(row=0,column=0)
+        elif selcet_level.get() == level[1]:
+            for item in tv.get_children():
+                tv.delete(item)
+            for sub in second_grade:
+                tv.insert("",'end',iid=sub[0],values=sub )
+                tv.grid(row=0,column=0)
+        elif selcet_level.get() == level[2]:
+            for item in tv.get_children():
+                tv.delete(item)
+            for sub in third_grade:
+                tv.insert("",'end',iid=sub[0],values=sub )
+                tv.grid(row=0,column=0)
+        elif selcet_level.get() == level[3]:
+            for item in tv.get_children():
+                tv.delete(item)
+            for sub in fourth_grade :
+                tv.insert("",'end',iid=sub[0],values=sub )
+                tv.grid(row=0,column=0)
+
+    btshow5 =Button(entries_frame,text="Show_Table",command=show_table5)
+    btshow5.place(x=200,y=270)
+
+    def backf():
+        root.destroy()
+        admin_info()
+    
+    btback =Button(entries_frame,text="Back",command=backf)
+    btback.pack_configure(anchor='center',side='bottom')
+    root.mainloop()
+
+
+
+
+
+#-----------------------------------------------------------------------#
 
 def mainn():
     root = Tk()
@@ -453,9 +623,6 @@ def stuudent_corces_regestered():
 
 
     student_info()
-
-
-
 #-----------------------------------------------------------------------------------------------#
 def admin_info():
     
@@ -490,7 +657,9 @@ def admin_info():
         root.destroy()
         mainn()
 
-
+    def modifay_corces():
+        root.destroy()
+        add_corces()
 
     lbl1 = Label(root, text = ': اسم الطالب -', font =font1, bg= 'light blue')
     lbl2 = Label(root, text = ': الايميل الجامعي -',font =font1, bg= 'light blue')
@@ -512,7 +681,8 @@ def admin_info():
     lbl7.place(x=272, y=124)
 #lbl8.place(x=330, y=174)
 
-    btn1 = Button(root, text='تعديل المقررات', font=font3, bg= 'white')
+    
+    btn1 = Button(root, text='تعديل المقررات', font=font3, bg= 'white',command = modifay_corces)
     btn2 = Button(root, text='تعديل الطلاب', font=font3, bg= 'white', command = modifay_student)
     btn3 = Button(root, text='تسجيل الخروج', font=font3, bg= 'white', command = logout)
 
@@ -521,10 +691,6 @@ def admin_info():
     btn1.place(x=420, y=280)
 
     root.mainloop()
-
-
-
-
 #----------------------------------------------------------------------------------------------------------#
 def student_information():
     
@@ -555,7 +721,7 @@ def student_information():
     def student_corces():
         root.destroy()
         stuudent_corces_regestered()
-        #student_info()
+        #student_info() 
     def student_selection():
         root.destroy()
         select()
@@ -600,11 +766,7 @@ def student_information():
     btn1.place(x=420, y=250)
 
     root.mainloop()
-
-
-
 #-------------------------------------------------------------------------------------------------#
-
 def main():
     flag = 5  
     root = Tk()
