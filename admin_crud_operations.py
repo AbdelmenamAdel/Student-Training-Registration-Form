@@ -2,7 +2,7 @@ import sqlite3
 # ! ##################################### Admins CRUD Read Operation #####################################
 from models import AdminModel 
 # ? #################### Create Admins Operation ####################
-class Admin:
+class AdminCRUD:
 # ! #################### Database Connection and Close ####################
     def connect_db(self):
         """
