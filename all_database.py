@@ -22,11 +22,12 @@ def create_db():
     # ! Create Students Table
     cr.execute("""CREATE TABLE IF NOT EXISTS Students
         (sid INTEGER PRIMARY KEY AUTOINCREMENT,
-        fname VARCHAR(255) NOT NULL,
-        mname VARCHAR(255) NOT NULL,
-        lname VARCHAR(255) NOT NULL,
-        semail VARCHAR(255) NOT NULL,
-        sgpa Integer(5) NOT NULL,
-        scourse VARCHAR(255) NOT NULL)""")
+        username VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        Ssh INTEGER NOT NULL,
+        gpa INTEGER NOT NULL,
+        grade VARCHAR(255) NOT NULL,       
+        passedHours INTEGER NOT NULL)""")
 
 create_db()
