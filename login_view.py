@@ -1,7 +1,8 @@
 from tkinter import Radiobutton, StringVar, Tk, Label, Entry, Button, messagebox, Frame
 
-from admin_crud_operations import Admin
+from admin_crud_operations import AdminCRUD
 from constants import *
+from student_crud_operations import StudentCRUD
 class LoginView:
     def __init__(self):
         self.root = Tk()
@@ -59,7 +60,7 @@ class LoginView:
         elif (self.display_option() == 1):
             self.login_student(username, password)
     def login_admin(self, username, password):       
-        admin=Admin()
+        admin=AdminCRUD()
         res=admin.search_admin(username, password)
         if res:
             messagebox.showinfo("Success", "Login successful!")
@@ -71,4 +72,14 @@ class LoginView:
             messagebox.showerror("Error", "Invalid username or password")
 
     def login_student(self, username, password):
-        pass
+        student=StudentCRUD()
+        res=student.search_student(username,password)
+        print(res)
+        if res:
+            messagebox.showinfo("Success", "Login successful!")
+            self.root.destroy()  # !Close the login screen
+            from student_view import StudentView
+            StudentView(student=res)
+        else:
+            print("Invalid username or password")
+            messagebox.showerror("Error", "Invalid username or password")
