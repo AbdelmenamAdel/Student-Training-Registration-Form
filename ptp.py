@@ -304,7 +304,7 @@ def mainn():
         #root.destroy()
 
         root2.mainloop()
-
+ 
     add_btn = Button(frame2, text="Add", command=add)
     def delete():
         for student in student_table.selection():
