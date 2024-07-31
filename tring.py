@@ -1,90 +1,105 @@
-from tkinter import END, LEFT, Button, Frame, Image, Label, Tk
-from tkinter.ttk import Treeview
+import re
+from tkinter import Button, Entry, Frame, IntVar, Label, Radiobutton, Checkbutton, Tk, StringVar, BooleanVar, messagebox
+from tkinter import ttk
+from constants import *  # Ensure constants are defined here
+from models import StudentModel
+from student_crud_operations import StudentCRUD
 
+class InsertStudentView:
+    def __init__(self):
+        self.root = Tk()
+        self.root.title("Insert A New Student")
+        self.root.geometry("500x600")
+        self.root.configure(bg='#2c3e50')
 
-def stuudent_corces_regestered():
- 
+        self.frame = Frame(self.root, padx=20, pady=20, bg='#34495e')
+        self.frame.pack(pady=50)
 
-    def root_window_title():
-        root = Tk()
-        root.title("نظام المقررات")
-        root.geometry("650x450")
-        title_lbl = Label(root, text="بيان المقررات", font=("Arial", 16))
-        title_lbl.pack()
-        return root
+        self.create_widgets()
+        
+        self.root.mainloop()
 
+    def create_widgets(self):
+        # ! Title
+        title_lbl = Label(self.frame, text="Create An Account", font=('Arial', 18, 'bold'), bg='#34495e', fg='white')
+        title_lbl.grid(row=0, column=0, columnspan=2, pady=(0, 20))
 
-    def studentInfo_frame(root, student_name, student_gpa,student_year):
+        # ! Labels and Entries
+        labels = ["Student Name", "Email", "Password", "Confirm Password", "National ID", "GPA", "Passed Hours", "Grade"]
+        self.entries = {}
 
-       student_frame = Frame(root)
-       student_frame.pack()
+        for i, text in enumerate(labels):
+            lbl = Label(self.frame, text=f"{text}:", font=('Arial', 12), bg='#34495e', fg='white', anchor="n")
+            lbl.grid(row=i+1, column=0, sticky="e", pady=pady10)
+            if text != "Grade":
+                entry = Entry(self.frame, width=25)
+                entry.grid(row=i+1, column=1, pady=pady10, padx=padx10)
+                self.entries[text] = entry
 
-       studentName_lbl = Label(student_frame, text=f"اسم الطالب: {student_name}", font=("Arial", 12))
-       studentName_lbl.grid(row=0, column=1, padx=10, pady=5)
+        # ! Grade Combobox
+        gradess = ["Grade one", "Grade two", "Grade three", "Grade four"]
+        self.grade_var = StringVar()
+        self.grade_var.set(gradess[0])
 
-       studentGpa_lbl = Label(student_frame, text=f"المعدل التراكمي: {student_gpa}", font=("Arial", 12))
-       studentGpa_lbl.grid(row=0, column=0, padx=10, pady=5)
+        grades = ttk.Combobox(self.frame, values=gradess, state='readonly', textvariable=self.grade_var)
+        grades.grid(row=8, column=1, pady=pady10)
 
-       studentYear_lbl = Label(student_frame, text=f"العام الدراسى: {student_year}", font=("Arial", 12))
-       studentYear_lbl.grid(row=1, column=0, padx=10, pady=5, columnspan=2)
-
-    def CoursesTable(root, courses):
-       courses_frame = Frame(root)
-       courses_frame.pack()
-
-
-       columns = ("grade","credits","course_name","course_code")
-
-       tree =Treeview(courses_frame, columns=columns, show="headings")
-
-
-       tree.heading("course_code", text="كود المقرر")
-       tree.heading("course_name", text="اسم المقرر")
-       tree.heading("credits", text="عدد الساعات")
-       tree.heading("grade", text="الدرجة")
-
-
-       tree.column("course_name", width=200)
-       tree.column("credits", width=100)
-       tree.column("grade", width=50)
-       tree.column("course_code", width=100)
-
-
-       for course in courses:
-           tree.insert(END, values=course)
-
-       tree.pack()
-
-    
-
-
-    def BackButton(root):
-        def logout():
-            root.destroy()
-            # student_information()
-        back_button = Button(root, text="BACK",font=("Arial", 12,'bold'),fg="white", bg="dark blue",command=logout)
-        back_button.pack(side=LEFT, anchor="sw", padx=7, pady=5)
-
-
-    def student_info():
-         student_name = "شمس مجدي"
-         student_gpa = 3.75
-         student_year = "الفرقة الثالثة"
-
- 
-         courses = [
-        ("A",3,"Structural programming","CS101"),
-        ("B+",3, "Discrete mathematics","MA102"),
-        ( "B",3,"Physics","PH103"),
-        ("A-",2,"English","EN104")
-         ]
-
-         root = root_window_title()
-         studentInfo_frame(root, student_name, student_gpa ,student_year)
-         CoursesTable(root, courses)
-         BackButton(root)
-         root.mainloop()
-
-
-    student_info()
-stuudent_corces_regestered()
+        # ! Buttons
+        save_btn = Button(self.frame, text="Insert Student", command=self.save)
+        save_btn.grid(row=9, columnspan=2, pady=pady10)    
+    def save(self):
+        if(self.validate_entries()!=False):
+            # ! Get values from entries
+            student = StudentModel(
+                username=self.entries["Student Name"].get(),
+                email=self.entries["Email"].get(),
+                password=self.entries["Password"].get(),
+                Ssh=self.entries["National ID"].get(),
+                gpa=self.entries["GPA"].get(),
+                grade=self.grade_var.get(),
+                passedHours=self.entries["Passed Hours"].get()
+            )
+            messagebox.showinfo("Success", "Student inserted successfully!")
+            # ! Save student to database
+            std=StudentCRUD()
+            std.insert_student(student)
+            std.read_students()
+            # # ! Example usage of student object
+            # print(student.username)
+            # print(student.email)
+            # print(student.password)
+            # print(student.Ssh)
+            # print(student.gpa)
+            # print(student.grade)
+            # print(student.passedHours)
+    def is_valid_email(self, email):
+        # ! Regex pattern for validating an Email
+        pattern = r'^[a-zA-Z0-9_.+-]+@fci\.bu\.edu\.eg$'
+        return re.match(pattern, email)
+    def validate_entries(self):
+        # ! Validate entries
+        if self.entries["Email"].get() == "" or self.entries["Student Name"].get() == "" or self.entries["Password"].get() == "" or self.entries["National ID"].get() == "" or self.entries["GPA"].get() == "" or self.entries["Passed Hours"].get() == "" :
+            messagebox.showerror("Error", "Please fill all fields")
+            return False
+        if self.entries["Password"].get() != self.entries["Confirm Password"].get():
+            messagebox.showerror("Error", "Passwords don't match")
+            return False
+        if self.entries["National ID"].get().isdigit() == False:
+            messagebox.showerror("Error", "National ID must be a number")
+            return False
+        if len(self.entries["National ID"].get()) != 14:
+            messagebox.showerror("Error", "National ID lenth must be 14 digits")
+            return False
+        email = self.entries["Email"].get()
+        if not self.is_valid_email(email):
+            messagebox.showerror("Invalid Email", "Please enter a valid email address.")
+            return False
+        if self.entries["GPA"].get().isdigit() == False:
+            messagebox.showerror("Error", "GPA must be a number")
+            return False
+        if self.entries["Passed Hours"].get().isdigit() == False:
+            messagebox.showerror("Error", "Passed Hours must be a number")
+            return False
+   
+if __name__ == "__main__":
+    InsertStudentView()
