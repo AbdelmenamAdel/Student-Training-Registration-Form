@@ -5,6 +5,8 @@ from tkinter.ttk import Combobox
 from tkinter.ttk import Style
 from tkinter.ttk import Treeview
 #from tkinter.ttk import *
+import sqlite3
+
 
 def add_corces():
 
@@ -81,27 +83,48 @@ def add_corces():
         txt_hoursub.place_configure(x=150,y=170)
 
         def savedata():
+            con = sqlite3.Connection('db.db')
+            
             info = (txt_namesub.get(), txt_codesub.get(), txt_hoursub.get())
             if selcet_level.get() == level[0]:
-                first_grade.append(info)
+                #first_grade.append(info)
+                x = 1
+                con.execute('''INSERT INTO course(course_name,course_code,course_hours,subject,year) VALUES(?,?,?,?,?)''',(info[0],info[1],info[2],"m",x))
                 show_table5()
             elif selcet_level.get() == level[1]:
-                 second_grade.append(info)
+                 #second_grade.append(info)
+                 x = 2
+                 con.execute('''INSERT INTO course(course_name,course_code,course_hours,subject,year) VALUES(?,?,?,?,?)''',(info[0],info[1],info[2],"m",x))
                  show_table5()
             elif selcet_level.get() == level[2]:
-                third_grade.append(info)
+                #third_grade.append(info)
+                x = 3
+                con.execute('''INSERT INTO course(course_name,course_code,course_hours,subject,year) VALUES(?,?,?,?,?)''',(info[0],info[1],info[2],"m",x))
                 show_table5()
             elif selcet_level.get() == level[3]:
-                fourth_grade.append(info)
+                #fourth_grade.append(info)
+                x = 4
+                con.execute('''INSERT INTO course(course_name,course_code,course_hours,subject,year) VALUES(?,?,?,?,?)''',(info[0],info[1],info[2],"m",x))
                 show_table5()
+            #show_table5()
+            con.commit()
+            con.close()
+            root2.destroy()
         btn_save = Button(root2,text = 'save',command=savedata)
         btn_save.pack_configure(anchor='center',side='bottom')
     
         root2.mainloop()
 
     def delet():
+        con = sqlite3.Connection('db.db')
+        
         for student in tv.selection():
-                tv.delete(student)
+            con.execute('DELETE FROM course WHERE course_name = ?',(student,))
+                #tv.delete(student)
+        show_table5()
+        con.commit()
+        con.close()
+                
     
     bt_add=Button(entries_frame,text='Add',command= add_sub)
     bt_delet=Button(entries_frame,text='Delete', command= delet)
@@ -118,11 +141,11 @@ def add_corces():
     style.configure('mystyle.Treeview.Heading',font=('Calibri',13 ))
     tv=Treeview(tree_frame,columns=(1,2,3) ,style="mystyle.Treeview")
 
-    tv.heading("1", text="عدد الساعات")
+    tv.heading("1", text="اسم المقرر")
     tv.column("1", width="140")
-    tv.heading("2", text="كود المقرر")
+    tv.heading("2", text="عدد الساعات")
     tv.column("2", width="140")
-    tv.heading("3", text="اسم المقرر")
+    tv.heading("3", text="كود المقرر")
     tv.column("3", width="140")
     tv['show']='headings'
 
@@ -139,30 +162,40 @@ def add_corces():
 
 
     def show_table5():
+        
+        con = sqlite3.Connection('db.db')
+        
         if selcet_level.get() == level[0]:
             for item in tv.get_children():
                 tv.delete(item)
-            for sub in first_grade:
+            res = con.execute('SELECT course_name,course_hours,course_code FROM course WHERE year = 1').fetchall()
+            for sub in res:
                 tv.insert("",'end',iid=sub[0],values=sub )
                 tv.grid(row=0,column=0)
         elif selcet_level.get() == level[1]:
             for item in tv.get_children():
                 tv.delete(item)
-            for sub in second_grade:
+            res = con.execute('SELECT course_name,course_hours,course_code FROM course WHERE year = 2').fetchall()    
+            for sub in res:
                 tv.insert("",'end',iid=sub[0],values=sub )
                 tv.grid(row=0,column=0)
+                
         elif selcet_level.get() == level[2]:
             for item in tv.get_children():
                 tv.delete(item)
-            for sub in third_grade:
+            res = con.execute('SELECT course_name,course_hours,course_code FROM course WHERE year = 3').fetchall()
+            for sub in res:
                 tv.insert("",'end',iid=sub[0],values=sub )
                 tv.grid(row=0,column=0)
         elif selcet_level.get() == level[3]:
             for item in tv.get_children():
                 tv.delete(item)
-            for sub in fourth_grade :
+            res = con.execute('SELECT course_name,course_hours,course_code FROM course WHERE year = 4').fetchall()
+            for sub in res :
                 tv.insert("",'end',iid=sub[0],values=sub )
                 tv.grid(row=0,column=0)
+        con.commit()
+        con.close()
 
     btshow5 =Button(entries_frame,text="Show_Table",command=show_table5)
     btshow5.place(x=200,y=270)
@@ -304,7 +337,7 @@ def mainn():
         #root.destroy()
 
         root2.mainloop()
- 
+
     add_btn = Button(frame2, text="Add", command=add)
     def delete():
         for student in student_table.selection():
@@ -427,7 +460,7 @@ def show_table():
 
 #--------------------------------------------------------------------#
 
-
+'''
 
 def select():
 
@@ -508,11 +541,115 @@ def select():
 
 
 
+'''
 
 
 
 
 
+def select():
+
+
+
+    root = Tk()
+
+    subjects = [(1, 'Computer Arch', 3), (2, 'System Analyses', 3), (3, 'Linear Algebra', 2)]
+
+    subject2 = []
+    con = sqlite3.Connection('db.db')
+
+    columns = ['id', 'Subject Name', 'Number of hours']
+    tree = Treeview(root, columns=columns, show='headings')
+    tree.column('Subject Name', width=200, anchor='center')
+    tree.column('Number of hours', width=300, anchor='center')
+    tree.heading('id', text='كود المقرر')
+    tree.heading('Subject Name', text='اسم المقرر')
+    tree.heading('Number of hours', text='عدد الساعات')
+    
+    res = con.execute('SELECT course_id,course_name,course_hours,course_code FROM course WHERE year = 1').fetchall()
+    for sub in res:
+        tree.insert("",'end',iid=sub[0],values=sub )
+    con.commit()
+    con.close()
+    
+    
+    #for subject in subjects:
+        #tree.insert('', 'end', iid=subject[0], values=subject)
+
+    tree2 = Treeview(root, columns=columns, show='headings')
+    tree2.column('Subject Name', width=200, anchor='center')
+    tree2.column('Number of hours', width=300, anchor='center')
+    tree2.heading('id', text='كود المقرر')
+    tree2.heading('Subject Name', text='اسم المقرر')
+    tree2.heading('Number of hours', text='عدد الساعات')
+
+
+    def get_selected():
+        con = sqlite3.Connection('db.db')
+        for selected in tree2.get_children():
+            subje = tree2.item(selected)['values']
+            con.execute('''INSERT INTO regestered(subject_id,student_id) VALUES(?,?)''',(subje[0],1))
+            #print(tree.item(selected, 'values'))
+            print(subje[0])
+        con.commit()
+        con.close()
+        logout()
+        
+        
+            
+
+
+    btn = Button(root, text='Save', command=get_selected)
+
+
+    def delete_selected():
+        con = sqlite3.Connection('db.db')
+        for selected in tree2.selection():
+            tree2.delete(selected)
+        for item in tree.get_children():
+            tree.delete(item)
+        res = con.execute('SELECT course_id,course_name,course_hours,course_code FROM course WHERE year = 1').fetchall()
+        for sub in res:
+            tree.insert("",'end',iid=sub[0],values=sub )
+        con.commit()
+        con.close()
+
+
+    btn_Del = Button(root, text='Delete', command=delete_selected)
+
+
+    def add_selected():
+        for selected in tree.selection():
+            subject2 = tree.item(selected)['values']
+            tree2.insert('', 'end', values=subject2)
+        for selected in tree.selection():
+            tree.delete(selected)
+
+
+    btn_Add = Button(root, text='Add', command=add_selected)
+    
+    def logout():
+        root.destroy()
+        student_information()
+        
+    btn_back = Button(root, text='Back', command=logout)
+
+    scrollbar = Scrollbar(root, orient=VERTICAL, command=tree.yview)
+    tree.configure(yscrollcommand=scrollbar.set)
+    tree.grid(row=0, column=0, columnspan=2)
+
+    tree2.grid(row=1, column=0, columnspan=2)
+
+    btn.grid(row=2, column=0, columnspan=2)
+    btn_Add.grid(row=3, column=0, columnspan=2)
+    btn_Del.grid(row=4, column=0, columnspan=2)
+    btn_back.grid(row=5, column=0, columnspan=2)
+    scrollbar.grid(row=0, column=2, columnspan=2, sticky=N + S)
+    style = Style()
+    style.configure('Treeview', font=('Arial', 12), rowheight=30, foreground='#e5e5e5', background='#14213d')
+    style.map('Treeview', foreground=[('selected', '#000000')], background=[('selected', '#fca311')])
+    style.configure('Treeview.Heading', font=('Tahoma', 14))
+    root.mainloop()
 
 
 
@@ -623,6 +760,9 @@ def stuudent_corces_regestered():
 
 
     student_info()
+
+
+
 #-----------------------------------------------------------------------------------------------#
 def admin_info():
     
@@ -691,6 +831,10 @@ def admin_info():
     btn1.place(x=420, y=280)
 
     root.mainloop()
+
+
+
+
 #----------------------------------------------------------------------------------------------------------#
 def student_information():
     
@@ -721,7 +865,7 @@ def student_information():
     def student_corces():
         root.destroy()
         stuudent_corces_regestered()
-        #student_info() 
+        #student_info()
     def student_selection():
         root.destroy()
         select()
@@ -766,7 +910,11 @@ def student_information():
     btn1.place(x=420, y=250)
 
     root.mainloop()
+
+
+
 #-------------------------------------------------------------------------------------------------#
+
 def main():
     flag = 5  
     root = Tk()
