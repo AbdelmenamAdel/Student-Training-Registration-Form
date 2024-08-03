@@ -8,7 +8,7 @@ pady10=10
 btn_width=10
 width=750
 height=500
-geometry=f"{width}x{height}"
+geometry=f"{width}x{height}+250+100"
 # ! Fonts
 font_style_arial="Arial"
 font_size_12=12
@@ -17,5 +17,6 @@ font_size_12=12
 background_color="#e0e0e0"
 secondary_color="#4F1787"
 primary_color="#189df6"
+common_color="#1c5e80"
 black="#333333"
 white="#ffffff"
