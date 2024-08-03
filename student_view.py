@@ -2,6 +2,7 @@
 from tkinter import *
 from constants import*
 from models import StudentModel
+from student_info_view import StudentInfoView
 class StudentView:
     def __init__(self,student:StudentModel):
         self.root = Tk()
@@ -53,7 +54,7 @@ class StudentView:
         LoginView()
     def modifay_student(self):
         self.root.destroy()
-       
+        StudentInfoView(student=self.student)
         
     def modifay_cources(self):
         self.root.destroy()
