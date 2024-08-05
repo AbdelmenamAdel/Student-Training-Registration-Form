@@ -13,7 +13,7 @@ class AdminCRUD:
         """
         try:
             # ! Database Connection
-            db = sqlite3.connect("Database/registration_form_project.db")
+            db = sqlite3.connect("Database/student_registration_system.db")
             # ! Setting Up The Cursor
             cr = db.cursor()
             print("Database connected successfully.")
@@ -148,11 +148,9 @@ class AdminCRUD:
     
 # * ##################################### Test Admins Operations #####################################    
 # first_user=AdminModel(username="abdo",password="1234",email="adel@gmail.com",Ssh="12345678910111")
-# second_user=AdminModel(username="Mohammed Adel",password="123456",email="mo@gmail.com")
-# user=Admin()
+# second_user=AdminModel(username="Mohammed Adel",password="123456",email="mo@gmail.com",Ssh="12345678910111")
+# user=AdminCRUD()
 # user.insert_admin(first_user)
 # user.update_admin(first_user,1)
-# user.delete_admin(3)
-# user.delete_admin(2)
 # user.read_admins()
 
