@@ -2,9 +2,11 @@ from tkinter import *
 from tkinter.ttk import Combobox, Style, Treeview
 import sqlite3
 from constants import *
+from models import CourseModel
 
 class CoursesInfoView:
-    def __init__(self):
+    def __init__(self,admin):
+        self.admin=admin
         self.root = Tk()
         self.root.title('تسجيل المقرارت')
         self.root.geometry(geometry)
@@ -92,36 +94,36 @@ class CoursesInfoView:
         btn_save.grid(row=3, column=0, columnspan=2, pady=10, padx=10)
 
     def savedata(self):
-        con = sqlite3.connect('db.db')
-        info = (self.sub_name.get(), self.sub_code.get(), self.sub_hour.get())
-        year = self.level.index(self.selcet_level.get()) + 1
-        con.execute('''INSERT INTO course(course_name, course_code, course_hours, subject, year) VALUES(?,?,?,?,?)''', (info[0], info[1], info[2], "m", year))
+        con = sqlite3.connect('Database/student_registration_system.db')
+        course=CourseModel(name=self.sub_name.get(),code=self.sub_code.get(),hours=self.sub_hour.get(),grade=(self.level.index(self.selcet_level.get()) + 1))
+        con.execute('''INSERT INTO Courses (name, code, hours, grade) VALUES (?,?,?,?)''', (course.name,course.code,course.hours,course.grade))
         con.commit()
         con.close()
         self.show_table()
         self.root2.destroy()
 
     def delete(self):
-        con = sqlite3.Connection('db.db')
-        for course in self.tv.selection():
-            con.execute('DELETE FROM course WHERE course_name = ?', (course,))
+        con = sqlite3.Connection('Database/student_registration_system.db')
+        for cid in self.tv.selection():
+            con.execute('DELETE FROM Courses WHERE cid = ?', (cid,))
         con.commit()
         con.close()
         self.show_table()
 
     def show_table(self):
-        con = sqlite3.Connection('db.db')
-        year = self.level.index(self.selcet_level.get()) + 1
+        con = sqlite3.Connection('Database/student_registration_system.db')
+        grade = self.level.index(self.selcet_level.get()) + 1
         for item in self.tv.get_children():
             self.tv.delete(item)
-        res = con.execute('SELECT course_name, course_hours, course_code FROM course WHERE year = ?', (year,)).fetchall()
+        res = con.execute('SELECT * FROM Courses WHERE grade = ?', (grade,)).fetchall()
         for sub in res:
-            self.tv.insert('', 'end', iid=sub[0], values=sub)
+            self.tv.insert('', 'end', iid=sub[0], values=(sub[1],sub[3],sub[2]))
         con.commit()
         con.close()
 
     def back(self):
         self.root.destroy()
+        from admin_view import AdminView
+        AdminView(admin=self.admin)
+        
 
-if __name__ == "__main__":
-    CoursesInfoView()
