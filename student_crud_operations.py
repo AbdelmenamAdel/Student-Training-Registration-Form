@@ -13,7 +13,7 @@ class StudentCRUD:
         """
         try:
             # ! Database Connection
-            db = sqlite3.connect("Database/registration_form_project.db")
+            db = sqlite3.connect("Database/student_registration_system.db")
             # ! Setting Up The Cursor
             cr = db.cursor()
             print("Database connected successfully.")
@@ -67,11 +67,11 @@ class StudentCRUD:
             self.close_db(db,cr)
 
     # ? #################### Read Admins Operation ####################
-    def read_students(self):
+    def read_students(self,grade):
         cr, db = self.connect_db()
         try:
             # ! Read students from Table
-            cr.execute("SELECT * FROM Students")
+            cr.execute("SELECT * FROM Students WHERE grade = ?", (grade,))
             students = cr.fetchall()
             print(students)
             return students  # ! Optional: Return the fetched data for further use
@@ -126,18 +126,18 @@ class StudentCRUD:
             self.close_db(db,cr)
 
     # ? #################### Delete Admins Operation ####################
-    def delete_student(self, id):
+    def delete_student(self, Ssh):
         cr, db = self.connect_db()
         try:
             # ! Check if the student with the given id exists
-            cr.execute('SELECT COUNT(1) FROM Students WHERE uid = ?', (id,))
+            cr.execute('SELECT COUNT(1) FROM Students WHERE Ssh = ?', (Ssh,))
             if cr.fetchone()[0] > 0:
                 # ! Delete the student from the students table
-                cr.execute('DELETE FROM Students WHERE uid = ?', (id,))
-                print(f"User with id {id} deleted successfully.")
+                cr.execute('DELETE FROM Students WHERE Ssh = ?', (Ssh,))
+                print(f"User with id {Ssh} deleted successfully.")
                 db.commit()  # ! Commit the changes
             else:
-                print(f"User with id {id} does not exist.")
+                print(f"User with id {Ssh} does not exist.")
         except Exception as e:
             print(f"An error occurred: {e}")
             return False  # ! Indicate that an error occurred
@@ -146,7 +146,7 @@ class StudentCRUD:
             self.close_db(db,cr)
     
 # * ##################################### Test Admins Operations #####################################    
-# student =StudentModel("abdo",12345,30501231556676,"abdo@gmail.com",3.3,"second",66)
+# student =StudentModel("seif",123,30501231556676,"seif@gmail.com",3.3,"second",66)
 # user=StudentCRUD()
 # user.read_students()
 # user.search_student("abdo",12345)
