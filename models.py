@@ -14,6 +14,8 @@ class StudentModel:
         self.grade=grade
         self.passedHours = passedHours
 class CourseModel:
-    def __init__(self, cname, cdescription):
-        self.cname = cname
-        self.code = cdescription
+    def __init__(self, name, code,hours,grade):
+        self.name = name
+        self.code = code
+        self.hours=hours
+        self.grade=grade
