@@ -45,8 +45,8 @@ class StudentView:
         self.lbl_student_passedHours = Label(self.root_frame, text=self.student[7], font=font_content, bg=background_color)
 
         # Buttons
-        self.btn_edit_courses = Button(self.root_frame, text='تسجيل المقررات', font=font_button,  bg=primary_color, fg=white,width=12,command=self.modifay_cources)
-        self.btn_edit_students = Button(self.root_frame, text='بيان بالمقررات المسجله', font=font_button,  bg=primary_color, fg=white,width=12,command=self.modifay_student)
+        self.btn_regis_courses = Button(self.root_frame, text='تسجيل المقررات', font=font_button,  bg=primary_color, fg=white,width=12,command=self.modifay_cources)
+        self.btn_form_courses = Button(self.root_frame, text='بيان بالمقررات المسجله', font=font_button,  bg=primary_color, fg=white,width=12,command=self.modifay_student)
         self.btn_logout = Button(self.root_frame, text='تسجيل الخروج', font=font_button,  bg=primary_color, fg=white,width=12,command=self.logout)
     def logout(self):
         self.root.destroy()
@@ -81,6 +81,6 @@ class StudentView:
         self.lbl_student_passedHours.grid(row=5, column=0, sticky='w', padx=padx10, pady=pady10)
 
         # Position buttons using grid
-        self.btn_edit_courses.grid(row=6, column=1,padx=15, pady=40, sticky='e')
-        self.btn_edit_students.grid(row=6, column=2, padx=15, pady=40, sticky='w')
-        self.btn_logout.grid(row=7,  columnspan=4, pady=0, sticky='s')
+        self.btn_regis_courses.grid(row=6, column=2,padx=80, pady=40, sticky='e')
+        self.btn_form_courses.grid(row=6, column=3, padx=80, pady=40, sticky='w')
+        self.btn_logout.grid(row=7,  column=1,columnspan=4, sticky='s')
