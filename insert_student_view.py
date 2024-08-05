@@ -6,8 +6,9 @@ from models import StudentModel
 from student_crud_operations import StudentCRUD
 
 class InsertStudentView:
-    def __init__(self):
+    def __init__(self,grade):
         self.root = Tk()
+        self.grade=grade
         self.root.title("Insert A New Student")
         self.root.geometry("500x600")
         self.root.configure(bg='#2c3e50')
@@ -25,7 +26,7 @@ class InsertStudentView:
         title_lbl.grid(row=0, column=0, columnspan=2, pady=(0, 20))
 
         # ! Labels and Entries
-        labels = ["Student Name", "Email", "Password", "Confirm Password", "National ID", "GPA", "Passed Hours", "Grade"]
+        labels = ["Student Name", "Email", "Password", "Confirm Password", "National ID", "GPA", "Passed Hours"]
         self.entries = {}
 
         for i, text in enumerate(labels):
@@ -37,20 +38,22 @@ class InsertStudentView:
                 self.entries[text] = entry
 
         # ! Grade Combobox
-        gradess = ["Grade one", "Grade two", "Grade three", "Grade four"]
-        self.grade_var = StringVar()
-        self.grade_var.set(gradess[0])
+        # self.levels = ["Grade one", "Grade two", "Grade three", "Grade four"]
+        # self.grade_var = StringVar()
+        # self.grade_var.set("Grade one")
 
-        grades = ttk.Combobox(self.frame, values=gradess,width=22, state='readonly', textvariable=self.grade_var)
-        grades.grid(row=8, column=1, pady=pady10)
+        # self.grades = ttk.Combobox(self.frame, values=self.levels,width=22, state='readonly', textvariable=self.grade_var)
+        # self.grades.grid(row=8, column=1, pady=pady10)
 
         # ! Buttons
         save_btn = Button(self.frame, text="Insert Student", command=self.save, width=btn_width*2)
-        save_btn.grid(row=9, column=1, pady=pady10)  
+        save_btn.grid(row=8, column=1, pady=pady10)  
         back_btn = Button(self.frame, text="Back", command=self.pop, width=btn_width)
-        back_btn.grid(row=9, column=0, pady=pady10)
+        back_btn.grid(row=8, column=0, pady=pady10)
     def pop(self):
         self.root.destroy()  
+        import students_manager
+       
     def save(self):
         if(self.validate_entries()!=False):
             # ! Get values from entries
@@ -60,14 +63,15 @@ class InsertStudentView:
                 password=self.entries["Password"].get(),
                 Ssh=self.entries["National ID"].get(),
                 gpa=self.entries["GPA"].get(),
-                grade=self.grade_var.get(),
+                grade=self.grade,
                 passedHours=self.entries["Passed Hours"].get()
             )
+            print(student.grade)
             messagebox.showinfo("Success", "Student inserted successfully!")
             # ! Save student to database
             std=StudentCRUD()
             std.insert_student(student)
-            std.read_students()
+
             # # ! Example usage of student object
             # print(student.username)
             # print(student.email)
@@ -98,12 +102,9 @@ class InsertStudentView:
         if not self.is_valid_email(email):
             messagebox.showerror("Invalid Email", "Please enter a valid email address.")
             return False
-        if self.entries["GPA"].get().isdigit() == False:
-            messagebox.showerror("Error", "GPA must be a number")
-            return False
+        # if self.entries["GPA"].get().float() == False:
+        #     messagebox.showerror("Error", "GPA must be a number")
+        #     return False
         if self.entries["Passed Hours"].get().isdigit() == False:
             messagebox.showerror("Error", "Passed Hours must be a number")
             return False
-   
-if __name__ == "__main__":
-    InsertStudentView()
