@@ -48,12 +48,15 @@ class AdminView:
         LoginView()
     def modifay_student(self):
         self.root.destroy()
+        from students_manager import StudentManager
+        StudentManager(self.admin)
+        
        
         
     def modifay_cources(self):
         self.root.destroy()
-        # add_corces()
-
+        from cources_info_view import CoursesInfoView
+        CoursesInfoView(admin=self.admin)
     def position_widgets(self):
         # Position labels using grid
         self.lbl1.grid(row=0, column=3, sticky='e', padx=10, pady=10)
