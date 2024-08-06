@@ -81,6 +81,6 @@ class StudentView:
         self.lbl_student_passedHours.grid(row=5, column=0, sticky='w', padx=padx10, pady=pady10)
 
         # Position buttons using grid
-        self.btn_regis_courses.grid(row=6, column=1, pady=40, sticky='e')
-        self.btn_form_courses.grid(row=6, column=2,  pady=40, sticky='w')
-        self.btn_logout.grid(row=7,  column=1,columnspan=4, sticky='s')
+        self.btn_regis_courses.grid(row=6, column=0,padx=padx20, pady=40, sticky='e')
+        self.btn_form_courses.grid(row=6, column=2,padx=padx20,  pady=40, sticky='w')
+        self.btn_logout.grid(row=7,columnspan=4, sticky='s')
