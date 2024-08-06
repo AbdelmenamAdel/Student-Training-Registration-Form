@@ -2,7 +2,6 @@
 from tkinter import *
 from constants import*
 from models import StudentModel
-from student_info_view import StudentInfoView
 class StudentView:
     def __init__(self,student:StudentModel):
         self.root = Tk()
@@ -45,7 +44,7 @@ class StudentView:
         self.lbl_student_passedHours = Label(self.root_frame, text=self.student[7], font=font_content, bg=background_color)
 
         # Buttons
-        self.btn_regis_courses = Button(self.root_frame, text='تسجيل المقررات', font=font_button,  bg=primary_color, fg=white,width=12,command=self.modifay_cources)
+        self.btn_regis_courses = Button(self.root_frame, text='تسجيل المقررات', font=font_button,  bg=primary_color, fg=white,width=12,command=self.registered_cources)
         self.btn_form_courses = Button(self.root_frame, text='بيان بالمقررات المسجله', font=font_button,  bg=primary_color, fg=white,width=12,command=self.modifay_student)
         self.btn_logout = Button(self.root_frame, text='تسجيل الخروج', font=font_button,  bg=primary_color, fg=white,width=12,command=self.logout)
     def logout(self):
@@ -54,12 +53,13 @@ class StudentView:
         LoginView()
     def modifay_student(self):
         self.root.destroy()
+        from student_info_view import StudentInfoView
         StudentInfoView(student=self.student)
         
-    def modifay_cources(self):
+    def registered_cources(self):
         self.root.destroy()
-        # add_corces()
-
+        from courses_registration_view import CoursesRegistrationView
+        CoursesRegistrationView(self.student)
     def position_widgets(self):
         # Position labels using grid
         self.lbl1.grid(row=0, column=3, sticky='e', padx=10, pady=10)
