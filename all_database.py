@@ -30,9 +30,9 @@ def create_db():
         gpa REAL NOT NULL,
         grade VARCHAR(255) NOT NULL,       
         passedHours INTEGER NOT NULL)""")
-    cr.execute("""CREATE TABLE IF NOT EXISTS Regestered
+    cr.execute("""CREATE TABLE IF NOT EXISTS Registered
         (rid INTEGER PRIMARY KEY AUTOINCREMENT,
-        subject_id INTEGER NOT NULL,
+        subject_name VARCHAR(255) NOT NULL,
         student_id INTEGER NOT NULL)""")
 
 create_db()
