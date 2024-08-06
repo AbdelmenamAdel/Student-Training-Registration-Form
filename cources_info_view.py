@@ -3,7 +3,7 @@ from tkinter.ttk import Combobox, Style, Treeview
 import sqlite3
 from constants import *
 from models import CourseModel
-
+from cources_crud_operations import CoursesCRUD
 class CoursesInfoView:
     def __init__(self,admin):
         self.admin=admin
@@ -12,7 +12,7 @@ class CoursesInfoView:
         self.root.geometry(geometry)
         self.root.resizable(False, False)
         self.root.configure(bg=common_color)
-
+        self.courseCRUD = CoursesCRUD()
         self.sub_name = StringVar()
         self.sub_code = StringVar()
         self.sub_hour = StringVar()
@@ -94,32 +94,35 @@ class CoursesInfoView:
         btn_save.grid(row=3, column=0, columnspan=2, pady=10, padx=10)
 
     def savedata(self):
-        con = sqlite3.connect('Database/student_registration_system.db')
+        # con = sqlite3.connect('Database/student_registration_system.db')
         course=CourseModel(name=self.sub_name.get(),code=self.sub_code.get(),hours=self.sub_hour.get(),grade=(self.level.index(self.selcet_level.get()) + 1))
-        con.execute('''INSERT INTO Courses (name, code, hours, grade) VALUES (?,?,?,?)''', (course.name,course.code,course.hours,course.grade))
-        con.commit()
-        con.close()
+        # con.execute('''INSERT INTO Courses (name, code, hours, grade) VALUES (?,?,?,?)''', (course.name,course.code,course.hours,course.grade))
+        # con.commit()
+        # con.close()
+        self.courseCRUD.insert_course(course)
         self.show_table()
         self.root2.destroy()
 
     def delete(self):
-        con = sqlite3.Connection('Database/student_registration_system.db')
+        # con = sqlite3.Connection('Database/student_registration_system.db')
         for cid in self.tv.selection():
-            con.execute('DELETE FROM Courses WHERE cid = ?', (cid,))
-        con.commit()
-        con.close()
+            self.courseCRUD.delete_course(cid)
+            # con.execute('DELETE FROM Courses WHERE cid = ?', (cid,))
+        # con.commit()
+        # con.close()
         self.show_table()
 
     def show_table(self):
-        con = sqlite3.Connection('Database/student_registration_system.db')
+        # con = sqlite3.Connection('Database/student_registration_system.db')
         grade = self.level.index(self.selcet_level.get()) + 1
         for item in self.tv.get_children():
             self.tv.delete(item)
-        res = con.execute('SELECT * FROM Courses WHERE grade = ?', (grade,)).fetchall()
+        res = self.courseCRUD.read_courses(grade)
+        # res = con.execute('SELECT * FROM Courses WHERE grade = ?', (grade,)).fetchall()
         for sub in res:
             self.tv.insert('', 'end', iid=sub[0], values=(sub[1],sub[3],sub[2]))
-        con.commit()
-        con.close()
+        # con.commit()
+        # con.close()
 
     def back(self):
         self.root.destroy()
