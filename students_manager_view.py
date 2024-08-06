@@ -6,7 +6,7 @@ from constants import *
 from models import AdminModel
 from student_crud_operations import StudentCRUD
 
-class StudentManager:
+class StudentManagerView:
     def __init__(self,admin:AdminModel):
         self.root = Tk()
         self.admin=admin

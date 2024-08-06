@@ -48,8 +48,8 @@ class AdminView:
         LoginView()
     def modifay_student(self):
         self.root.destroy()
-        from students_manager import StudentManager
-        StudentManager(self.admin)
+        from students_manager_view import StudentManagerView
+        StudentManagerView(self.admin)
         
        
         
