@@ -2,87 +2,42 @@ import sqlite3
 from tkinter import *
 from tkinter.ttk import Treeview, Button, Scrollbar, Style
 from constants import *
+from courses_registration_crud import CoursesRegistrationCRUD
 from models import StudentModel
-class Database:
-    def __init__(self, db_name='Database/student_registration_system.db'):
-        self.db_name = db_name
-
-    def execute_query(self, query, params=()):
-        with sqlite3.connect(self.db_name) as con:
-            cursor = con.cursor()
-            cursor.execute(query, params)
-            return cursor.fetchall()
-       
-    def save_changes(self, query, params=()):
-        with sqlite3.connect(self.db_name) as con:
-            cursor = con.cursor()
-            cursor.execute(query, params)
-            con.commit()
-
-class SubjectManager:
-    def __init__(self, db,email):
-        self.db = db
-        self.email = email
-
-    def get_subjects(self, grade):
-        query = 'SELECT * FROM Courses WHERE grade = ?'
-        return self.db.execute_query(query, (grade,))
-    def get_student_id(self):
-        query = 'SELECT sid FROM Students WHERE email = ?'
-        return self.db.execute_query(query, (self.email,))
-    def get_registered_subjects(self, student_id):
-        query = 'SELECT subject_name FROM Registered WHERE student_id = ?'
-        res = self.db.execute_query(query, (student_id,))
-        subject_names = tuple([row[0] for row in res])
-        if not subject_names:
-            return []
-        query = f'SELECT * FROM Courses WHERE name IN ({",".join("?" * len(subject_names))})'
-        return self.db.execute_query(query, subject_names)
-
-    def register_subject(self, subject_name, student_id):
-        query = 'INSERT INTO Registered (subject_name, student_id) VALUES (?, ?)'
-        self.db.save_changes(query, (subject_name, student_id))
-
-    def unregister_subject(self, subject_name, student_id):
-        query = 'DELETE FROM Registered WHERE subject_name = ? AND student_id = ?'
-        self.db.save_changes(query, (subject_name, student_id))
-
 class CoursesRegistrationView:
     def __init__(self, student:StudentModel):
         self.root = Tk()
         self.student=student
-        self.student_email =self.student.email
         self.root.title('تسجيل المقررات')
         self.root.geometry("650x500+250+100")
         self.root.resizable(False, False)
         self.root.configure(bg=common_color)
-        self.db = Database()
-        self.subject_manager = SubjectManager(self.db, self.student_email)
+        self.subject_manager = CoursesRegistrationCRUD(self.student[3])
         self.initialize_ui()
         self.load_subjects()
         self.load_registered_subjects()
         self.root.mainloop()
 
     def initialize_ui(self):
-        self.columns = ['id', 'Subject Name', 'Number of hours']
+        self.columns = ['id', 'Subject Name', 'Subject Code']
 
         # Setup Treeview for available subjects
         self.tree = Treeview(self.root, height=5, columns=self.columns, show='headings')
         self.tree.column('Subject Name', width=200, anchor='center')
-        self.tree.column('Number of hours', width=200, anchor='center')
+        self.tree.column('Subject Code', width=200, anchor='center')
         self.tree.column('id', width=200, anchor='center')
-        self.tree.heading('id', text='Subject Code')
+        self.tree.heading('id', text='Subject Id')
         self.tree.heading('Subject Name', text='Subject Name')
-        self.tree.heading('Number of hours', text='Number of Hours')
+        self.tree.heading('Subject Code', text='Subject Code')
 
         # Setup Treeview for selected subjects
         self.tree2 = Treeview(self.root, height=5, columns=self.columns, show='headings')
         self.tree2.column('Subject Name', width=200, anchor='center')
-        self.tree2.column('Number of hours', width=200, anchor='center')
+        self.tree2.column('Subject Code', width=200, anchor='center')
         self.tree2.column('id', width=200, anchor='center')
-        self.tree2.heading('id', text='Subject Code')
+        self.tree2.heading('id', text='Subject Id')
         self.tree2.heading('Subject Name', text='Subject Name')
-        self.tree2.heading('Number of hours', text='Number of Hours')
+        self.tree2.heading('Subject Code', text='Subject Code')
 
         scrollbar = Scrollbar(self.root, orient=VERTICAL, command=self.tree.yview)
         self.tree.configure(yscrollcommand=scrollbar.set)
@@ -98,11 +53,11 @@ class CoursesRegistrationView:
         self.create_buttons()
 
     def load_subjects(self):
-        if(self.student.grade=="Grade one"):
+        if(self.student[6]=="Grade one"):
             grade = 1
-        elif(self.student.grade=="Grade two"):
+        elif(self.student[6]=="Grade two"):
             grade = 2
-        elif(self.student.grade=="Grade three"):
+        elif(self.student[6]=="Grade three"):
             grade = 3
         else :
             grade = 4
@@ -135,18 +90,19 @@ class CoursesRegistrationView:
         btn_back.grid(row=3, column=2, padx=10, pady=10, sticky='ew')
 
     def save_selected(self):
+        student_id = self.subject_manager.get_student_id()
         for selected in self.tree2.get_children():
             subject = self.tree2.item(selected)['values']
-            self.subject_manager.register_subject(subject_name=subject[1], student_id=1)
+            self.subject_manager.register_subject(subject_name=subject[1], student_id=student_id)
         self.logout()
 
     def delete_selected(self):
+        student_id = self.subject_manager.get_student_id()
         for selected in self.tree2.selection():
             subject = self.tree2.item(selected)['values']
-            self.subject_manager.unregister_subject(subject_name=subject[1], student_id=1)
+            self.subject_manager.unregister_subject(subject_name=subject[1], student_id=student_id)
             self.tree2.delete(selected)
         self.refresh_tree()
-
     def add_selected(self):
         for selected in self.tree.selection():
             subject = self.tree.item(selected)['values']
@@ -160,4 +116,5 @@ class CoursesRegistrationView:
 
     def logout(self):
         self.root.destroy()
-        # Call student_information() function if needed
+        from student_view import StudentView
+        StudentView(self.student)
