@@ -52,7 +52,7 @@ class InsertStudentView:
         back_btn.grid(row=8, column=0, pady=pady10)
     def pop(self):
         self.root.destroy()  
-        import students_manager
+        import students_manager_view
        
     def save(self):
         if(self.validate_entries()!=False):
