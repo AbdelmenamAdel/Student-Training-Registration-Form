@@ -3,6 +3,7 @@ from tkinter.ttk import Treeview
 from PIL import ImageTk, Image
 from constants import *
 from models import StudentModel
+from student_view import StudentView
 
 class StudentInfoView:
     def __init__(self,student: StudentModel):
@@ -83,6 +84,5 @@ class StudentInfoView:
 
     def pop(self):
         self.root.destroy()
-        from login_view import LoginView
-        LoginView()
+        StudentView(student=self.student)
 
